@@ -48,6 +48,26 @@ async function fetchData() {
   return JSON.parse(content);
 }
 
+app.get('/debug', async (req, res) => {
+  try {
+    const result = await fetch(GITHUB_API_URL, {
+      headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+    });
+    const json = await result.json();
+    res.json({
+      status: result.status,
+      url: GITHUB_API_URL,
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
+      file: FILE_PATH,
+      hasToken: !!GITHUB_TOKEN,
+      response: json
+    });
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
 // Update data ke GitHub
 async function updateData(newData) {
   const current = await fetch(GITHUB_API_URL, {
