@@ -1,7 +1,7 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 const app = express();
 const path = require("path");
 const PORT = process.env.PORT || 3575;
@@ -30,10 +30,10 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(session({
+app.use(cookieSession({
+  name: 'session',
   secret: 'secret-key',
-  resave: false,
-  saveUninitialized: true
+  maxAge: 24 * 60 * 60 * 1000
 }));
 
 app.get('/set', (req, res) => res.json(settings));
